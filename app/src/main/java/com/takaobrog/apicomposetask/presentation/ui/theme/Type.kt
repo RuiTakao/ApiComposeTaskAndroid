@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.ui.theme
+package com.takaobrog.apicomposetask.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
