@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.ui.theme
+package com.takaobrog.apicomposetask.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
