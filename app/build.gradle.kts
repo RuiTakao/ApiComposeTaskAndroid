@@ -55,6 +55,8 @@ dependencies {
     ksp(libs.google.hilt.compiler)
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
