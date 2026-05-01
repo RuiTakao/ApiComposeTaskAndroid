@@ -5,11 +5,16 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Provides
+    @Named("base_url")
+    fun provideBaseUrl() = "http://10.0.2.2:8765/"
 
     @Provides
     @Singleton
