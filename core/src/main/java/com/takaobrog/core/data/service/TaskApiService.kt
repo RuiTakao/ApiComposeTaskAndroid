@@ -1,6 +1,6 @@
-package com.takaobrog.apicomposetask.data.service
+package com.takaobrog.core.data.service
 
-import com.takaobrog.apicomposetask.domain.data.GetTaskListResponse
+import com.takaobrog.core.domain.data.GetTaskListResponse
 import retrofit2.http.GET
 
 interface TaskApiService {
