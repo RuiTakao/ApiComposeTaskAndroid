@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.presentation
+package com.takaobrog.apicomposetask
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

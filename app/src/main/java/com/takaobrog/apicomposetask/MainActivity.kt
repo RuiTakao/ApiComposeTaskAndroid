@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.presentation
+package com.takaobrog.apicomposetask
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.takaobrog.apicomposetask.presentation.ui.theme.ApiComposeTaskTheme
+import com.takaobrog.apicomposetask.ui.theme.ApiComposeTaskTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.presentation.ui.theme
+package com.takaobrog.apicomposetask.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
