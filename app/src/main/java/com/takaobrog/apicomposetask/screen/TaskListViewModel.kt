@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask
+package com.takaobrog.apicomposetask.screen
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class TaskListViewModel @Inject constructor(
     private val repository: TaskRepository,
 ) : ViewModel() {
     fun test() {
