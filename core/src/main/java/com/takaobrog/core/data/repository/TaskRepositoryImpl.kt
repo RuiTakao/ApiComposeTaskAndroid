@@ -1,8 +1,8 @@
-package com.takaobrog.apicomposetask.data.repository
+package com.takaobrog.core.data.repository
 
-import com.takaobrog.apicomposetask.data.service.TaskApiService
-import com.takaobrog.apicomposetask.domain.data.GetTaskListResponse
-import com.takaobrog.apicomposetask.domain.repository.TaskRepository
+import com.takaobrog.core.data.service.TaskApiService
+import com.takaobrog.core.domain.data.GetTaskListResponse
+import com.takaobrog.core.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

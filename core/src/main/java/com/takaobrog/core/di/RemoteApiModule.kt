@@ -1,6 +1,6 @@
-package com.takaobrog.apicomposetask.di
+package com.takaobrog.core.di
 
-import com.takaobrog.apicomposetask.data.service.TaskApiService
+import com.takaobrog.core.data.service.TaskApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

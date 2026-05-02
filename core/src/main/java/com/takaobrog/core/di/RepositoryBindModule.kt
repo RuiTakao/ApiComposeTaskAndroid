@@ -1,7 +1,7 @@
-package com.takaobrog.apicomposetask.di
+package com.takaobrog.core.di
 
-import com.takaobrog.apicomposetask.data.repository.TaskRepositoryImpl
-import com.takaobrog.apicomposetask.domain.repository.TaskRepository
+import com.takaobrog.core.data.repository.TaskRepositoryImpl
+import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

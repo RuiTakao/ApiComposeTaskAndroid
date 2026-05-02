@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ApiComposeTask"
 include(":app")
- 
+include(":core")
