@@ -1,6 +1,5 @@
 package com.takaobrog.apicomposetask.screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
@@ -22,6 +21,9 @@ class TaskListViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
+    private val _isShowDialog = MutableStateFlow(false)
+    val isShowDialog = _isShowDialog.asStateFlow()
+
     init {
        load()
     }
@@ -31,10 +33,15 @@ class TaskListViewModel @Inject constructor(
         load()
     }
 
+    fun onDismiss() {
+        _isShowDialog.value = false
+    }
+
     private fun load() {
         viewModelScope.launch {
             repository.getTaskList()
                 .catch { e ->
+                    _isShowDialog.value = true
                     _uiState.value = TaskListUiState.Error(message = e.message)
                 }.collect { list ->
                     _isRefreshing.value = false
