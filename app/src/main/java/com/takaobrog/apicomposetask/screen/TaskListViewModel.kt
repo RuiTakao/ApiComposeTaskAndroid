@@ -19,12 +19,25 @@ class TaskListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
     init {
+       load()
+    }
+
+    fun onRefresh() {
+        _isRefreshing.value = true
+        load()
+    }
+
+    private fun load() {
         viewModelScope.launch {
             repository.getTaskList()
                 .catch { e ->
-                   _uiState.value = TaskListUiState.Error(message = e.message)
+                    _uiState.value = TaskListUiState.Error(message = e.message)
                 }.collect { list ->
+                    _isRefreshing.value = false
                     _uiState.value = TaskListUiState.Success(list = list)
                 }
         }
