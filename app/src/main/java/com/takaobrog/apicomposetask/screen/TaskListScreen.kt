@@ -16,7 +16,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.DefaultText
-import com.takaobrog.apicomposetask.component.OkDialog
 import com.takaobrog.apicomposetask.component.ScrollableBox
 import com.takaobrog.apicomposetask.component.TaskListItem
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
@@ -52,7 +50,7 @@ fun TaskListScreen(
                 is TaskListUiState.Success ->
                     if (state.list.isEmpty()) ScreenSuccessEmpty() else ScreenSuccess(list = state.list)
 
-                is TaskListUiState.Error -> ScreenError(message = state.message)
+                is TaskListUiState.Error -> {}
             }
         }
     }
@@ -96,13 +94,6 @@ private fun ScreenSuccessEmpty() {
             fontWeight = FontWeight.Bold,
         )
     }
-}
-
-@Composable
-private fun ScreenError(message: String?) {
-    OkDialog(
-        onDismiss = {}, title = message ?: "", titleColor = colorResource(id = R.color.danger_color)
-    )
 }
 
 @Preview(showBackground = true)
