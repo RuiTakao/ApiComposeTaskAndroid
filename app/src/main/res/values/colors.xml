@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="base_color">#FF333333</color>
+    <color name="danger_color">#FFFF0000</color>
     <color name="percent_progress_color">#FF00FF00</color>
     <color name="percent_progress_track_color">#FF333333</color>
     <color name="task_list_item_base_color">#FFFFFFFF</color>

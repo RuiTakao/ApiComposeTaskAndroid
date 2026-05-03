@@ -1,6 +1,5 @@
 package com.takaobrog.apicomposetask.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,11 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.DefaultText
+import com.takaobrog.apicomposetask.component.OkDialog
 import com.takaobrog.apicomposetask.component.TaskListItem
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
 import com.takaobrog.core.domain.data.GetTaskListResponse
@@ -48,8 +49,12 @@ fun TaskListScreen(state: TaskListUiState) {
 
 @Composable
 private fun ScreenLoading() {
-    Log.d("DEBUG", "loading")
-    Text(text = "loading")
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator()
+    }
 }
 
 @Composable
@@ -86,8 +91,11 @@ private fun ScreenSuccessEmpty() {
 
 @Composable
 private fun ScreenError(message: String?) {
-    Log.d("DEBUG", "error $message")
-    Text(text = "error $message")
+    OkDialog(
+        onDismiss = {},
+        title = message ?: "",
+        titleColor = colorResource(id = R.color.danger_color)
+    )
 }
 
 @Preview(showBackground = true)
