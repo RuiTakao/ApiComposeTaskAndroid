@@ -3,8 +3,8 @@ package com.takaobrog.apicomposetask.screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.apicomposetask.screen.model.TaskListErrorState
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
+import com.takaobrog.apicomposetask.util.ErrorState
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ class TaskListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _errorState = MutableStateFlow<TaskListErrorState?>(null)
+    private val _errorState = MutableStateFlow<ErrorState?>(null)
     val errorState = _errorState.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
@@ -42,11 +42,11 @@ class TaskListViewModel @Inject constructor(
         _isRefreshing.value = false
 
         when (errorState.value) {
-            TaskListErrorState.NetworkError -> {
+            ErrorState.NetworkError -> {
 
             }
 
-            is TaskListErrorState.SystemError -> {
+            is ErrorState.SystemError -> {
 
             }
 
@@ -65,9 +65,9 @@ class TaskListViewModel @Inject constructor(
 
                     // TODO 初期表示と表示済みで出し分け
                     if (e is ConnectException) {
-                        _errorState.value = TaskListErrorState.NetworkError
+                        _errorState.value = ErrorState.NetworkError
                     } else {
-                        _errorState.value = TaskListErrorState.SystemError(message = e.message)
+                        _errorState.value = ErrorState.SystemError(message = e.message)
                     }
                     _uiState.value = TaskListUiState.Success(list = emptyList())
                 }.collect { list ->

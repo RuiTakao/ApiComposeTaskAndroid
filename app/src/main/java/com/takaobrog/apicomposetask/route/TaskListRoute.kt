@@ -11,8 +11,8 @@ import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.OkDialog
 import com.takaobrog.apicomposetask.screen.TaskListScreen
 import com.takaobrog.apicomposetask.screen.TaskListViewModel
-import com.takaobrog.apicomposetask.screen.model.TaskListErrorState
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
+import com.takaobrog.apicomposetask.util.ErrorState
 
 fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
     composable(route = ScreenRoute.TaskList.route) {
@@ -33,7 +33,7 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
 
         errorState?.let { state ->
             when (state) {
-                TaskListErrorState.NetworkError -> {
+                ErrorState.NetworkError -> {
                     OkDialog(
                         onDismiss = viewModel::onDismiss,
                         title = "ネットワークに接続されていません",
@@ -41,7 +41,7 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
                     )
                 }
 
-                is TaskListErrorState.SystemError -> {
+                is ErrorState.SystemError -> {
                     OkDialog(
                         onDismiss = viewModel::onDismiss,
                         title = state.message ?: "",
