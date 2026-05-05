@@ -21,9 +21,6 @@ class TaskListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _errorState = MutableStateFlow<ErrorState?>(null)
-    val errorState = _errorState.asStateFlow()
-
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
@@ -37,22 +34,7 @@ class TaskListViewModel @Inject constructor(
     }
 
     fun onDismiss() {
-        Log.d("DEBUG", "uiState ${uiState.value}")
-        // TODO 初期表示と表示済みで出し分け
-        _isRefreshing.value = false
-
-        when (errorState.value) {
-            ErrorState.NetworkError -> {
-
-            }
-
-            is ErrorState.SystemError -> {
-
-            }
-
-            else -> {}
-        }
-        _errorState.value = null
+        Log.d("DEBUG", "onDismiss")
     }
 
     private fun load() {
@@ -65,11 +47,11 @@ class TaskListViewModel @Inject constructor(
 
                     // TODO 初期表示と表示済みで出し分け
                     if (e is ConnectException) {
-                        _errorState.value = ErrorState.NetworkError
+                        _uiState.value = TaskListUiState.Error(error = ErrorState.NetworkError)
                     } else {
-                        _errorState.value = ErrorState.SystemError(message = e.message)
+                        _uiState.value =
+                            TaskListUiState.Error(error = ErrorState.SystemError(message = e.message))
                     }
-                    _uiState.value = TaskListUiState.Success(list = emptyList())
                 }.collect { list ->
                     _isRefreshing.value = false
                     _uiState.value = TaskListUiState.Success(list = list)

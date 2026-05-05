@@ -1,5 +1,6 @@
 package com.takaobrog.apicomposetask.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,10 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.DefaultText
+import com.takaobrog.apicomposetask.component.OkDialog
 import com.takaobrog.apicomposetask.component.ScrollableBox
 import com.takaobrog.apicomposetask.component.TaskListItem
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
+import com.takaobrog.apicomposetask.util.ErrorState
 import com.takaobrog.core.domain.data.GetTaskListResponse
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +55,26 @@ fun TaskListScreen(
                     list = state.list
                 )
 
-                is TaskListUiState.Error -> ScreenError()
+                is TaskListUiState.Error -> {
+                    Log.d("DEBUG", "TaskListUiState.Error")
+                    when (state.error) {
+                        ErrorState.NetworkError -> {
+                            OkDialog(
+                                onDismiss = { onEvent(TaskListEvent.OnDismiss) },
+                                title = "ネットワークに接続されていません",
+                                titleColor = colorResource(id = R.color.danger_color),
+                            )
+                        }
+
+                        is ErrorState.SystemError -> {
+                            OkDialog(
+                                onDismiss = { onEvent(TaskListEvent.OnDismiss) },
+                                title = state.error.message ?: "",
+                                titleColor = colorResource(id = R.color.danger_color),
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -129,7 +152,14 @@ fun TaskListScreen_Preview_SuccessEmpty() {
 
 @Preview(showBackground = true)
 @Composable
-fun TaskListScreen_Preview_Error() {
-    val state = TaskListUiState.Error(message = "404")
+fun TaskListScreen_Preview_NetworkError() {
+    val state = TaskListUiState.Error(error = ErrorState.NetworkError)
+    TaskListScreen(state = state, onEvent = {}, isRefreshing = false)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TaskListScreen_Preview_SystemError() {
+    val state = TaskListUiState.Error(error = ErrorState.SystemError(message = "404"))
     TaskListScreen(state = state, onEvent = {}, isRefreshing = false)
 }
