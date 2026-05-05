@@ -11,15 +11,15 @@ import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.OkDialog
 import com.takaobrog.apicomposetask.screen.TaskListScreen
 import com.takaobrog.apicomposetask.screen.TaskListViewModel
+import com.takaobrog.apicomposetask.screen.model.TaskListErrorState
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
-import com.takaobrog.apicomposetask.screen.model.TaskListUiState
 
 fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
     composable(route = ScreenRoute.TaskList.route) {
         val viewModel: TaskListViewModel = hiltViewModel()
         val state by viewModel.uiState.collectAsState()
+        val errorState by viewModel.errorState.collectAsState()
         val isRefreshing by viewModel.isRefreshing.collectAsState()
-        val isShowDialog by viewModel.isShowDialog.collectAsState()
 
         TaskListScreen(
             state = state,
@@ -31,12 +31,24 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
             isRefreshing = isRefreshing,
         )
 
-        if (isShowDialog) {
-            OkDialog(
-                onDismiss = viewModel::onDismiss,
-                title = (state as TaskListUiState.Error).message ?: "",
-                titleColor = colorResource(id = R.color.danger_color),
-            )
+        errorState?.let { state ->
+            when (state) {
+                TaskListErrorState.NetworkError -> {
+                    OkDialog(
+                        onDismiss = viewModel::onDismiss,
+                        title = "ネットワークに接続されていません",
+                        titleColor = colorResource(id = R.color.danger_color),
+                    )
+                }
+
+                is TaskListErrorState.SystemError -> {
+                    OkDialog(
+                        onDismiss = viewModel::onDismiss,
+                        title = state.message ?: "",
+                        titleColor = colorResource(id = R.color.danger_color),
+                    )
+                }
+            }
         }
     }
 }
