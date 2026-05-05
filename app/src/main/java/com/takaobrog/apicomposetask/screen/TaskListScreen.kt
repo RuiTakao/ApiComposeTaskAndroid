@@ -47,10 +47,11 @@ fun TaskListScreen(
             when (state) {
                 TaskListUiState.Loading -> ScreenLoading()
 
-                is TaskListUiState.Success ->
-                    if (state.list.isEmpty()) ScreenSuccessEmpty() else ScreenSuccess(list = state.list)
+                is TaskListUiState.Success -> if (state.list.isEmpty()) ScreenSuccessEmpty() else ScreenSuccess(
+                    list = state.list
+                )
 
-                is TaskListUiState.Error -> {}
+                is TaskListUiState.Error -> ScreenError()
             }
         }
     }
@@ -94,6 +95,11 @@ private fun ScreenSuccessEmpty() {
             fontWeight = FontWeight.Bold,
         )
     }
+}
+
+@Composable
+private fun ScreenError() {
+    ScrollableBox {}
 }
 
 @Preview(showBackground = true)
