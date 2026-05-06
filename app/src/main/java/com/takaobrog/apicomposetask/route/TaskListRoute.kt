@@ -33,8 +33,11 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
                         }
                     }
 
-                    TaskListEvent.OnClickFab -> viewModel.onClickFab()
-                    is TaskListEvent.OnClickItem -> viewModel.onClickItem(id = event.id)
+                    TaskListEvent.OnClickFab ->
+                        navController.navigate(route = ScreenRoute.TaskCreate.route)
+
+                    is TaskListEvent.OnClickItem ->
+                        navController.navigate(route = "${ScreenRoute.TaskDetail.route}/${event.id}")
                 }
             },
             isRefreshing = isRefreshing,
