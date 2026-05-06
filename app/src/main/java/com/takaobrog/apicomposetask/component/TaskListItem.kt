@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.takaobrog.apicomposetask.R
+import com.takaobrog.component.component.DefaultText
 
 @Composable
 fun TaskListItem(

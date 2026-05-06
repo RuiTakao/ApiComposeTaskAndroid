@@ -7,6 +7,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.takaobrog.apicomposetask.R
+import com.takaobrog.component.component.DefaultText
 
 @Composable
 fun TargetDateText(targetDate: String?, modifier: Modifier = Modifier) {

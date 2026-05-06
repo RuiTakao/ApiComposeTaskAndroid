@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.component
+package com.takaobrog.component.component
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -8,7 +8,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
-import com.takaobrog.apicomposetask.R
+import com.takaobrog.component.R
 
 @Composable
 fun DefaultText(
