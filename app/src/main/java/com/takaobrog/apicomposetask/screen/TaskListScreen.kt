@@ -24,6 +24,7 @@ import com.takaobrog.apicomposetask.component.ScrollableBox
 import com.takaobrog.apicomposetask.component.TaskListItem
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
+import com.takaobrog.component.component.FAButton
 import com.takaobrog.component.model.ErrorState
 import com.takaobrog.component.screen.ErrorScreen
 import com.takaobrog.component.screen.LoadingScreen
@@ -37,6 +38,7 @@ fun TaskListScreen(
     isRefreshing: Boolean,
 ) {
     Scaffold(
+        floatingActionButton = { FAButton(onClick = { onEvent(TaskListEvent.OnClickFab) }) },
         contentWindowInsets = WindowInsets.systemBars,
     ) { paddingValues ->
         PullToRefreshBox(
