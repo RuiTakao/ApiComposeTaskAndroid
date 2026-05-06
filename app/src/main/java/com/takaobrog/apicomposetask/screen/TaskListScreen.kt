@@ -53,7 +53,7 @@ fun TaskListScreen(
 
                 is TaskListUiState.Error -> ErrorScreen(
                     state = state.error,
-                    onDismiss = { onEvent(TaskListEvent.OnDismiss) }
+                    onDismiss = { onEvent(TaskListEvent.OnDismiss(error = state.error)) }
                 )
             }
         }
