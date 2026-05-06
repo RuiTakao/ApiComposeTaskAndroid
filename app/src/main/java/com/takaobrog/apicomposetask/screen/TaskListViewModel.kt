@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
-import com.takaobrog.apicomposetask.util.ErrorState
+import com.takaobrog.component.model.ErrorState
+import com.takaobrog.component.model.ReloadState
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,31 +22,16 @@ class TaskListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
+    private val _reloadState = MutableStateFlow<ReloadState>(ReloadState.Idle)
+    val reloadState = _reloadState.asStateFlow()
+
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
     init {
-        load()
-    }
-
-    fun onRefresh() {
-        _isRefreshing.value = true
-        load()
-    }
-
-    fun onDismiss() {
-        Log.d("DEBUG", "onDismiss")
-    }
-
-    private fun load() {
         viewModelScope.launch {
             repository.getTaskList()
                 .catch { e ->
-                    _isRefreshing.value = false
-
-                    Log.d("DEBUG", "error $e")
-
-                    // TODO 初期表示と表示済みで出し分け
                     if (e is ConnectException) {
                         _uiState.value = TaskListUiState.Error(error = ErrorState.NetworkError)
                     } else {
@@ -53,7 +39,35 @@ class TaskListViewModel @Inject constructor(
                             TaskListUiState.Error(error = ErrorState.SystemError(message = e.message))
                     }
                 }.collect { list ->
+                    _uiState.value = TaskListUiState.Success(list = list)
+                }
+        }
+    }
+
+    fun onRefresh() {
+        _isRefreshing.value = true
+        reload()
+    }
+
+    fun onDismiss() {
+        reload()
+    }
+
+    private fun reload() {
+        _reloadState.value = ReloadState.Reloading
+        viewModelScope.launch {
+            repository.getTaskList()
+                .catch { e ->
                     _isRefreshing.value = false
+                    if (e is ConnectException) {
+                        _reloadState.value = ReloadState.Error(error = ErrorState.NetworkError)
+                    } else {
+                        _reloadState.value =
+                            ReloadState.Error(error = ErrorState.SystemError(message = e.message))
+                    }
+                }.collect { list ->
+                    _isRefreshing.value = false
+                    _reloadState.value = ReloadState.Idle
                     _uiState.value = TaskListUiState.Success(list = list)
                 }
         }

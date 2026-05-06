@@ -20,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.DefaultText
-import com.takaobrog.apicomposetask.component.ErrorScreen
-import com.takaobrog.apicomposetask.component.LoadingScreen
 import com.takaobrog.apicomposetask.component.ScrollableBox
 import com.takaobrog.apicomposetask.component.TaskListItem
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
-import com.takaobrog.apicomposetask.util.ErrorState
+import com.takaobrog.component.model.ErrorState
+import com.takaobrog.component.screen.ErrorScreen
+import com.takaobrog.component.screen.LoadingScreen
 import com.takaobrog.core.domain.data.GetTaskListResponse
 
 @OptIn(ExperimentalMaterial3Api::class)

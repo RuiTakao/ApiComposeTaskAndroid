@@ -1,21 +1,15 @@
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.library")
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.google.ksp)
-    alias(libs.plugins.google.hilt)
 }
 
 android {
-    namespace = "com.takaobrog.apicomposetask"
+    namespace = "com.takaobrog.component"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.takaobrog.apicomposetask"
         minSdk = 29
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,11 +45,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.google.hilt.android)
-    ksp(libs.google.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
-    implementation(project(":core"))
-    implementation(project(":component"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

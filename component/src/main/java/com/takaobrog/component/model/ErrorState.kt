@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.util
+package com.takaobrog.component.model
 
 sealed class ErrorState {
     data class SystemError(val message: String?) : ErrorState()

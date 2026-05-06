@@ -1,10 +1,11 @@
-package com.takaobrog.apicomposetask.component
+package com.takaobrog.component.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.takaobrog.apicomposetask.R
-import com.takaobrog.apicomposetask.util.ErrorState
+import com.takaobrog.component.R
+import com.takaobrog.component.component.OkDialog
+import com.takaobrog.component.model.ErrorState
 
 @Composable
 fun ErrorScreen(state: ErrorState, onDismiss: () -> Unit) {
