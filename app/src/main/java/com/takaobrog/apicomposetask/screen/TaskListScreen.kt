@@ -48,7 +48,8 @@ fun TaskListScreen(
                 TaskListUiState.Loading -> LoadingScreen()
 
                 is TaskListUiState.Success -> if (state.list.isEmpty()) SuccessEmptyScreen() else SuccessScreen(
-                    list = state.list
+                    list = state.list,
+                    onEvent = onEvent,
                 )
 
                 is TaskListUiState.Error -> ErrorScreen(
@@ -61,7 +62,7 @@ fun TaskListScreen(
 }
 
 @Composable
-private fun SuccessScreen(list: List<GetTaskListResponse>) {
+private fun SuccessScreen(list: List<GetTaskListResponse>, onEvent: (TaskListEvent) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(all = 16.dp),
@@ -73,7 +74,7 @@ private fun SuccessScreen(list: List<GetTaskListResponse>) {
                 progressPercent = 0.3f,
                 targetDate = null,
                 isTargetDateOver = false,
-                onItemClick = {},
+                onItemClick = { onEvent(TaskListEvent.OnClickItem(id = item.id)) },
             )
         }
     }

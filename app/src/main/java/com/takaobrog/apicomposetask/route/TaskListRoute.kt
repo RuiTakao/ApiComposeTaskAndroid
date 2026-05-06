@@ -32,6 +32,9 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
                             is ErrorState.SystemError -> activity?.finish()
                         }
                     }
+
+                    TaskListEvent.OnClickFab -> viewModel.onClickFab()
+                    is TaskListEvent.OnClickItem -> viewModel.onClickItem(id = event.id)
                 }
             },
             isRefreshing = isRefreshing,
