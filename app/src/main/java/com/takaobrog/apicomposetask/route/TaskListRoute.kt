@@ -10,13 +10,15 @@ import androidx.navigation.compose.composable
 import com.takaobrog.apicomposetask.screen.TaskListScreen
 import com.takaobrog.apicomposetask.screen.TaskListViewModel
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
-import com.takaobrog.apicomposetask.util.ErrorState
+import com.takaobrog.component.model.ErrorState
+import com.takaobrog.component.screen.ReloadingScreen
 
 fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
     composable(route = ScreenRoute.TaskList.route) {
         val activity = LocalActivity.current
         val viewModel: TaskListViewModel = hiltViewModel()
         val state by viewModel.uiState.collectAsState()
+        val reloadState by viewModel.reloadState.collectAsState()
         val isRefreshing by viewModel.isRefreshing.collectAsState()
 
         TaskListScreen(
@@ -35,25 +37,6 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
             isRefreshing = isRefreshing,
         )
 
-        // TODO リロード処理で実装
-//        errorState?.let { state ->
-//            when (state) {
-//                ErrorState.NetworkError -> {
-//                    OkDialog(
-//                        onDismiss = viewModel::onDismiss,
-//                        title = "ネットワークに接続されていません",
-//                        titleColor = colorResource(id = R.color.danger_color),
-//                    )
-//                }
-//
-//                is ErrorState.SystemError -> {
-//                    OkDialog(
-//                        onDismiss = viewModel::onDismiss,
-//                        title = state.message ?: "",
-//                        titleColor = colorResource(id = R.color.danger_color),
-//                    )
-//                }
-//            }
-//        }
+        ReloadingScreen(state = reloadState, onDismissError = viewModel::onDismiss)
     }
 }

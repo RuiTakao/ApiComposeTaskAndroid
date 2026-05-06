@@ -55,7 +55,7 @@ private fun DetailView(progressPercent: Float, targetDate: String?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = colorResource(id = R.color.task_list_item_body_color))
+            .background(color = colorResource(id = R.color.base_background_color))
             .padding(start = 16.dp, top = 10.dp, bottom = 16.dp)
     ) {
         ProgressPercentItem(

@@ -9,5 +9,4 @@
     <!-- component -->
     <string name="target_date_text_label">期限</string>
     <string name="target_date_text_empty">未定</string>
-    <string name="dialog_confirm">OK</string>
 </resources>

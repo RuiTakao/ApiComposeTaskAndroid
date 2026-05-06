@@ -1,6 +1,6 @@
 package com.takaobrog.apicomposetask.screen.model
 
-import com.takaobrog.apicomposetask.util.ErrorState
+import com.takaobrog.component.model.ErrorState
 import com.takaobrog.core.domain.data.GetTaskListResponse
 
 sealed class TaskListUiState {
