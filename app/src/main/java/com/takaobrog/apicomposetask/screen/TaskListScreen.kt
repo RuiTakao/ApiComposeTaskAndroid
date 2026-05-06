@@ -1,7 +1,6 @@
 package com.takaobrog.apicomposetask.screen
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,12 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,10 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.DefaultText
+import com.takaobrog.apicomposetask.component.ErrorScreen
+import com.takaobrog.apicomposetask.component.LoadingScreen
 import com.takaobrog.apicomposetask.component.ScrollableBox
 import com.takaobrog.apicomposetask.component.TaskListItem
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
+import com.takaobrog.apicomposetask.util.ErrorState
 import com.takaobrog.core.domain.data.GetTaskListResponse
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,30 +45,23 @@ fun TaskListScreen(
             modifier = Modifier.padding(paddingValues = paddingValues),
         ) {
             when (state) {
-                TaskListUiState.Loading -> ScreenLoading()
+                TaskListUiState.Loading -> LoadingScreen()
 
-                is TaskListUiState.Success -> if (state.list.isEmpty()) ScreenSuccessEmpty() else ScreenSuccess(
+                is TaskListUiState.Success -> if (state.list.isEmpty()) SuccessEmptyScreen() else SuccessScreen(
                     list = state.list
                 )
 
-                is TaskListUiState.Error -> ScreenError()
+                is TaskListUiState.Error -> ErrorScreen(
+                    state = state.error,
+                    onDismiss = { onEvent(TaskListEvent.OnDismiss) }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun ScreenLoading() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-private fun ScreenSuccess(list: List<GetTaskListResponse>) {
+private fun SuccessScreen(list: List<GetTaskListResponse>) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(all = 16.dp),
@@ -87,7 +80,7 @@ private fun ScreenSuccess(list: List<GetTaskListResponse>) {
 }
 
 @Composable
-private fun ScreenSuccessEmpty() {
+private fun SuccessEmptyScreen() {
     ScrollableBox {
         DefaultText(
             text = stringResource(id = R.string.task_list_empty),
@@ -95,11 +88,6 @@ private fun ScreenSuccessEmpty() {
             fontWeight = FontWeight.Bold,
         )
     }
-}
-
-@Composable
-private fun ScreenError() {
-    ScrollableBox {}
 }
 
 @Preview(showBackground = true)
@@ -129,7 +117,14 @@ fun TaskListScreen_Preview_SuccessEmpty() {
 
 @Preview(showBackground = true)
 @Composable
-fun TaskListScreen_Preview_Error() {
-    val state = TaskListUiState.Error(message = "404")
+fun TaskListScreen_Preview_NetworkError() {
+    val state = TaskListUiState.Error(error = ErrorState.NetworkError)
+    TaskListScreen(state = state, onEvent = {}, isRefreshing = false)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TaskListScreen_Preview_SystemError() {
+    val state = TaskListUiState.Error(error = ErrorState.SystemError(message = "404"))
     TaskListScreen(state = state, onEvent = {}, isRefreshing = false)
 }
