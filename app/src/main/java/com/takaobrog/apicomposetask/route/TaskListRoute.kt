@@ -1,5 +1,6 @@
 package com.takaobrog.apicomposetask.route
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -9,9 +10,11 @@ import androidx.navigation.compose.composable
 import com.takaobrog.apicomposetask.screen.TaskListScreen
 import com.takaobrog.apicomposetask.screen.TaskListViewModel
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
+import com.takaobrog.apicomposetask.util.ErrorState
 
 fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
     composable(route = ScreenRoute.TaskList.route) {
+        val activity = LocalActivity.current
         val viewModel: TaskListViewModel = hiltViewModel()
         val state by viewModel.uiState.collectAsState()
         val isRefreshing by viewModel.isRefreshing.collectAsState()
@@ -21,7 +24,12 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
             onEvent = { event ->
                 when (event) {
                     TaskListEvent.OnRefresh -> viewModel.onRefresh()
-                    TaskListEvent.OnDismiss -> viewModel.onDismiss()
+                    is TaskListEvent.OnDismiss -> {
+                        when (event.error) {
+                            ErrorState.NetworkError -> viewModel.onDismiss()
+                            is ErrorState.SystemError -> activity?.finish()
+                        }
+                    }
                 }
             },
             isRefreshing = isRefreshing,
