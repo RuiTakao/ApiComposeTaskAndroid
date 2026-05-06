@@ -53,6 +53,14 @@ class TaskListViewModel @Inject constructor(
         reload()
     }
 
+    fun onClickFab() {
+        Log.d("DEBUG", "onClickFab")
+    }
+
+    fun onClickItem(id: Int) {
+        Log.d("DEBUG", "onClickItem $id")
+    }
+
     private fun reload() {
         _reloadState.value = ReloadState.Reloading
         viewModelScope.launch {

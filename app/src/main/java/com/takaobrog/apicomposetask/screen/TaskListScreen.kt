@@ -24,6 +24,7 @@ import com.takaobrog.apicomposetask.component.ScrollableBox
 import com.takaobrog.apicomposetask.component.TaskListItem
 import com.takaobrog.apicomposetask.screen.model.TaskListEvent
 import com.takaobrog.apicomposetask.screen.model.TaskListUiState
+import com.takaobrog.component.component.FAButton
 import com.takaobrog.component.model.ErrorState
 import com.takaobrog.component.screen.ErrorScreen
 import com.takaobrog.component.screen.LoadingScreen
@@ -37,6 +38,7 @@ fun TaskListScreen(
     isRefreshing: Boolean,
 ) {
     Scaffold(
+        floatingActionButton = { FAButton(onClick = { onEvent(TaskListEvent.OnClickFab) }) },
         contentWindowInsets = WindowInsets.systemBars,
     ) { paddingValues ->
         PullToRefreshBox(
@@ -48,7 +50,8 @@ fun TaskListScreen(
                 TaskListUiState.Loading -> LoadingScreen()
 
                 is TaskListUiState.Success -> if (state.list.isEmpty()) SuccessEmptyScreen() else SuccessScreen(
-                    list = state.list
+                    list = state.list,
+                    onEvent = onEvent,
                 )
 
                 is TaskListUiState.Error -> ErrorScreen(
@@ -61,7 +64,7 @@ fun TaskListScreen(
 }
 
 @Composable
-private fun SuccessScreen(list: List<GetTaskListResponse>) {
+private fun SuccessScreen(list: List<GetTaskListResponse>, onEvent: (TaskListEvent) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(all = 16.dp),
@@ -73,7 +76,7 @@ private fun SuccessScreen(list: List<GetTaskListResponse>) {
                 progressPercent = 0.3f,
                 targetDate = null,
                 isTargetDateOver = false,
-                onItemClick = {},
+                onItemClick = { onEvent(TaskListEvent.OnClickItem(id = item.id)) },
             )
         }
     }

@@ -1,3 +1,4 @@
 <resources>
     <string name="dialog_confirm">OK</string>
+    <string name="fab_icon_description">タスク追加</string>
 </resources>
