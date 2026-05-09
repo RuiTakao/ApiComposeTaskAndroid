@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.screen
+package com.takaobrog.apicomposetask.screen.task_list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.apicomposetask.component.TaskListItem
-import com.takaobrog.apicomposetask.screen.model.TaskListEvent
-import com.takaobrog.apicomposetask.screen.model.TaskListUiState
+import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEvent
+import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.component.DefaultText
 import com.takaobrog.component.component.FAButton
 import com.takaobrog.component.component.ScrollableBox
