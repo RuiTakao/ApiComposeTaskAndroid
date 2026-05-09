@@ -7,9 +7,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.takaobrog.apicomposetask.screen.TaskListScreen
-import com.takaobrog.apicomposetask.screen.TaskListViewModel
-import com.takaobrog.apicomposetask.screen.model.TaskListEvent
+import com.takaobrog.apicomposetask.screen.task_list.TaskListScreen
+import com.takaobrog.apicomposetask.screen.task_list.TaskListViewModel
+import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEvent
 import com.takaobrog.component.model.ErrorState
 import com.takaobrog.component.screen.ReloadingScreen
 

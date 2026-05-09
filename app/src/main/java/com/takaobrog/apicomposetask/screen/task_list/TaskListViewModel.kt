@@ -1,8 +1,8 @@
-package com.takaobrog.apicomposetask.screen
+package com.takaobrog.apicomposetask.screen.task_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.apicomposetask.screen.model.TaskListUiState
+import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.model.ConverterState
 import com.takaobrog.component.model.ReloadState
 import com.takaobrog.core.domain.repository.TaskRepository
