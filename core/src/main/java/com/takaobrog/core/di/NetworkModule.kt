@@ -16,10 +16,6 @@ import javax.inject.Singleton
 object NetworkModule {
 
     @Provides
-    @Named("base_url")
-    fun provideBaseUrl() = "http://10.0.2.2:8765/"
-
-    @Provides
     @Singleton
     fun provideMoshi(): Moshi =
         Moshi.Builder()

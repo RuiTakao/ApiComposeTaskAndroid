@@ -20,6 +20,21 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    flavorDimensions += "env"
+
+    productFlavors {
+        create("local") {
+            dimension = "env"
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8765/\"")
+            resValue("string", "app_name", "local")
+        }
+        create("remote") {
+            dimension = "env"
+            buildConfigField("String", "BASE_URL", "\"https://takaopres.blog/android_api_server_app/\"")
+            resValue("string", "app_name", "remote")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -38,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
