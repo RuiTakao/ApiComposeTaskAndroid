@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateEffect
 import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateFormState
+import com.takaobrog.core.domain.data.CreateTaskRequest
+import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +17,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskCreateViewModel @Inject constructor() : ViewModel() {
+class TaskCreateViewModel @Inject constructor(
+    private val repository: TaskRepository,
+) : ViewModel() {
     private val _formState = MutableStateFlow(TaskCreateFormState())
     val formState = _formState.asStateFlow()
 
@@ -45,10 +49,21 @@ class TaskCreateViewModel @Inject constructor() : ViewModel() {
 
     fun onSubmit() {
         viewModelScope.launch {
-            Log.d("DEBUG", "title ${_formState.value.title}")
-            Log.d("DEBUG", "comment ${_formState.value.comment}")
-            Log.d("DEBUG", "targetDate ${_formState.value.targetDate}")
-            _effect.emit(TaskCreateEffect.NavigateBack)
+            val response = repository.createTask(
+                createTaskRequest = CreateTaskRequest(
+                    title = _formState.value.title
+                )
+            )
+            response.collect { result ->
+                result.fold(
+                    onSuccess = {
+                        _effect.emit(TaskCreateEffect.NavigateBack)
+                    },
+                    onFailure = { e ->
+                        Log.d("DEBUG", "e $e")
+                    }
+                )
+            }
         }
     }
 }
