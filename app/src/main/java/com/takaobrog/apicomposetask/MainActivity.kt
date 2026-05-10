@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.takaobrog.apicomposetask.route.ScreenRoute
+import com.takaobrog.apicomposetask.route.taskCreateRoute
 import com.takaobrog.apicomposetask.route.taskListRoute
 import com.takaobrog.apicomposetask.ui.theme.ApiComposeTaskTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,14 +33,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = ScreenRoute.TaskList.route,
                 ) {
                     taskListRoute(navController = navController)
-                    composable(route = ScreenRoute.TaskCreate.route) {
-                        Button(
-                            onClick = { navController.popBackStack() },
-                            modifier = Modifier.padding(all = 100.dp),
-                        ) {
-                            Text(text = "TaskCreate")
-                        }
-                    }
+                    taskCreateRoute(navController = navController)
                     composable(
                         route = "${ScreenRoute.TaskDetail.route}/{id}",
                         arguments = listOf(navArgument("id") { type = NavType.IntType })
