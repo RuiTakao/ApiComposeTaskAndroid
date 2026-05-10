@@ -1,6 +1,7 @@
 package com.takaobrog.apicomposetask.route
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -9,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.takaobrog.apicomposetask.screen.task_list.TaskListScreen
 import com.takaobrog.apicomposetask.screen.task_list.TaskListViewModel
+import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEffect
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEvent
 import com.takaobrog.component.model.ErrorState
 import com.takaobrog.component.screen.ReloadingScreen
@@ -21,6 +23,14 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
         val reloadState by viewModel.reloadState.collectAsState()
         val isRefreshing by viewModel.isRefreshing.collectAsState()
 
+        LaunchedEffect(Unit) {
+            viewModel.effect.collect { effect ->
+                when (effect) {
+                    TaskListEffect.Reload -> viewModel.reload()
+                }
+            }
+        }
+
         TaskListScreen(
             state = state,
             onEvent = { event ->
@@ -28,7 +38,7 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
                     TaskListEvent.OnRefresh -> viewModel.onRefresh()
                     is TaskListEvent.OnDismiss -> {
                         when (event.error) {
-                            ErrorState.NetworkError -> viewModel.onDismiss()
+                            ErrorState.NetworkError -> viewModel.onRetry()
                             is ErrorState.SystemError -> activity?.finish()
                         }
                     }
@@ -43,6 +53,6 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
             isRefreshing = isRefreshing,
         )
 
-        ReloadingScreen(state = reloadState, onDismissError = viewModel::onDismiss)
+        ReloadingScreen(state = reloadState, onDismissError = viewModel::onRetry)
     }
 }

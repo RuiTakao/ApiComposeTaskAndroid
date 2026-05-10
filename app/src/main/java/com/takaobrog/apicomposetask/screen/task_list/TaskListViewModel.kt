@@ -2,13 +2,16 @@ package com.takaobrog.apicomposetask.screen.task_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEffect
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.model.ConverterState
 import com.takaobrog.component.model.ReloadState
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -24,6 +27,9 @@ class TaskListViewModel @Inject constructor(
 
     private val _reloadState = MutableStateFlow<ReloadState>(ReloadState.Idle)
     val reloadState = _reloadState.asStateFlow()
+
+    private val _effect = MutableSharedFlow<TaskListEffect>()
+    val effect = _effect.asSharedFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -43,19 +49,20 @@ class TaskListViewModel @Inject constructor(
         _isRefreshing.value = true
         _reloadState.value = ReloadState.Reloading
         viewModelScope.launch {
-            reload()
+            _effect.emit(TaskListEffect.Reload)
         }
     }
 
-    fun onDismiss() {
+    fun onRetry() {
         _reloadState.value = ReloadState.Reloading
         viewModelScope.launch {
             delay(500)
-            reload()
+            _effect.emit(TaskListEffect.Reload)
         }
     }
 
-    private suspend fun reload() {
+    suspend fun reload() {
+        if (reloadState.value is ReloadState.Reloading) return
         repository.getTaskList()
             .catch { e ->
                 _isRefreshing.value = false
