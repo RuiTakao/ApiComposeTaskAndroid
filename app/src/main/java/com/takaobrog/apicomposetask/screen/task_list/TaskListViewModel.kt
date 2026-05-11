@@ -47,14 +47,12 @@ class TaskListViewModel @Inject constructor(
 
     fun onRefresh() {
         _isRefreshing.value = true
-        _reloadState.value = ReloadState.Reloading
         viewModelScope.launch {
             _effect.emit(TaskListEffect.Reload)
         }
     }
 
     fun onRetry() {
-        _reloadState.value = ReloadState.Reloading
         viewModelScope.launch {
             delay(500)
             _effect.emit(TaskListEffect.Reload)
@@ -63,6 +61,7 @@ class TaskListViewModel @Inject constructor(
 
     suspend fun reload() {
         if (reloadState.value is ReloadState.Reloading) return
+        _reloadState.value = ReloadState.Reloading
         repository.getTaskList()
             .catch { e ->
                 _isRefreshing.value = false
