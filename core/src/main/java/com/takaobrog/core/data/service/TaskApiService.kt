@@ -6,11 +6,17 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface TaskApiService {
 
     @GET("tasks/get_task_list")
     suspend fun getTaskList(): List<GetTaskListResponse>
+
+    @GET("tasks/get_task/{id}")
+    suspend fun getTask(
+        @Path("id") id: Int,
+    ): GetTaskListResponse
 
     @POST("tasks/create_task")
     suspend fun createTask(
