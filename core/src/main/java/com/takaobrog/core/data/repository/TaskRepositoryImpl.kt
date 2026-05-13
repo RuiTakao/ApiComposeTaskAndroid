@@ -18,6 +18,11 @@ class TaskRepositoryImpl @Inject constructor(
         emit(response)
     }
 
+    override fun getTask(id : Int): Flow<GetTaskListResponse> = flow {
+        val response = service.getTask(id = id)
+        emit(response)
+    }
+
     override fun createTask(createTaskRequest: CreateTaskRequest): Flow<Result<Unit>> = flow {
         try {
             val request = service.createTask(createTaskRequest = createTaskRequest)

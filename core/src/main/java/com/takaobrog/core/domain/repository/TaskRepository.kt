@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
 
-    fun getTaskList() : Flow<List<GetTaskListResponse>>
+    fun getTaskList(): Flow<List<GetTaskListResponse>>
 
-    fun createTask(createTaskRequest: CreateTaskRequest) : Flow<Result<Unit>>
+    fun getTask(id: Int): Flow<GetTaskListResponse>
+
+    fun createTask(createTaskRequest: CreateTaskRequest): Flow<Result<Unit>>
 }
