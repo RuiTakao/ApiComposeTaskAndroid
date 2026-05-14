@@ -13,6 +13,10 @@
     <string name="task_create_form_target_date">期限</string>
     <string name="task_create_form_comment">コメント</string>
     <string name="task_create_form_submit">作成</string>
+    <!-- タスク詳細 -->
+    <string name="task_detail_item_progress_percent_label">進捗</string>
+    <string name="task_detail_item_edit_button">編集</string>
+    <string name="task_detail_item_delete_button">進捗</string>
     <!-- component -->
     <string name="target_date_text_label">期限</string>
     <string name="target_date_text_empty">未定</string>
