@@ -11,4 +11,6 @@ interface TaskRepository {
     fun getTask(id: Int): Flow<GetTaskListResponse>
 
     fun createTask(createTaskRequest: CreateTaskRequest): Flow<Result<Unit>>
+
+    fun deleteTask(id: Int): Flow<Result<Unit>>
 }

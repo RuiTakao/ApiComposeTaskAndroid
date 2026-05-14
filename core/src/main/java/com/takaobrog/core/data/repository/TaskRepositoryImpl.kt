@@ -18,7 +18,7 @@ class TaskRepositoryImpl @Inject constructor(
         emit(response)
     }
 
-    override fun getTask(id : Int): Flow<GetTaskListResponse> = flow {
+    override fun getTask(id: Int): Flow<GetTaskListResponse> = flow {
         val response = service.getTask(id = id)
         emit(response)
     }
@@ -35,6 +35,22 @@ class TaskRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Log.d("DEBUG", "code $e")
+            emit(Result.failure(exception = e))
+        }
+    }
+
+    override fun deleteTask(id: Int): Flow<Result<Unit>> = flow {
+        try {
+            val request = service.deleteTask(id=id)
+
+            Log.d("DEBUG", "code ${request.code()}")
+            if (request.isSuccessful) {
+                emit(Result.success(Unit))
+            } else {
+                emit(Result.failure(Exception("削除失敗")))
+            }
+        } catch (e: Exception) {
+            Log.d("DEBUG", "error $e")
             emit(Result.failure(exception = e))
         }
     }
