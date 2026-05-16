@@ -8,7 +8,7 @@ import com.takaobrog.component.component.OkDialog
 import com.takaobrog.component.model.ErrorState
 
 @Composable
-fun ErrorScreen(state: ErrorState, onDismiss: () -> Unit) {
+fun ErrorDialogScreen(state: ErrorState, onDismiss: () -> Unit) {
     when (state) {
         ErrorState.NetworkError -> {
             OkDialog(
@@ -31,11 +31,11 @@ fun ErrorScreen(state: ErrorState, onDismiss: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun NetworkErrorScreen_Preview() {
-    ErrorScreen(state = ErrorState.NetworkError, onDismiss = {})
+    ErrorDialogScreen(state = ErrorState.NetworkError, onDismiss = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SystemErrorScreen_Preview() {
-    ErrorScreen(state = ErrorState.SystemError(message = "404"), onDismiss = {})
+    ErrorDialogScreen(state = ErrorState.SystemError(message = "404"), onDismiss = {})
 }

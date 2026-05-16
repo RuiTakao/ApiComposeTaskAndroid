@@ -22,7 +22,7 @@ fun ReloadingScreen(
             alpha = 0.6f,
         )
 
-        is ReloadState.Error -> ErrorScreen(
+        is ReloadState.Error -> ErrorDialogScreen(
             state = state.error,
             onDismiss = { onDismissError() }
         )

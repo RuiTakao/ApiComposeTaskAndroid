@@ -26,7 +26,7 @@ import com.takaobrog.component.component.DefaultText
 import com.takaobrog.component.component.FAButton
 import com.takaobrog.component.component.scrollable.ScrollableBox
 import com.takaobrog.component.model.ErrorState
-import com.takaobrog.component.screen.ErrorScreen
+import com.takaobrog.component.screen.ErrorDialogScreen
 import com.takaobrog.component.screen.LoadingScreen
 import com.takaobrog.core.domain.data.GetTaskListResponse
 
@@ -54,7 +54,7 @@ fun TaskListScreen(
                     onEvent = onEvent,
                 )
 
-                is TaskListUiState.Error -> ErrorScreen(
+                is TaskListUiState.Error -> ErrorDialogScreen(
                     state = state.error,
                     onDismiss = { onEvent(TaskListEvent.OnDismiss(error = state.error)) }
                 )
