@@ -30,6 +30,18 @@ class TaskDetailViewModel @Inject constructor(
     }
 
     fun deleteConfirm() {
-        Log.d("DEBUG", "deleteConfirm")
+        viewModelScope.launch {
+            repository.deleteTask(id = 1)
+                .collect { result ->
+                result.fold(
+                    onSuccess = {
+                        Log.d("DEBUG", "success $it")
+                    },
+                    onFailure = { e ->
+                        Log.d("DEBUG", "e $e")
+                    }
+                )
+            }
+        }
     }
 }
