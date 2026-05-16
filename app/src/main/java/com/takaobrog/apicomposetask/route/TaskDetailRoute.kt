@@ -20,18 +20,21 @@ fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
     ) {
         val viewModel : TaskDetailViewModel = hiltViewModel()
         val uiState by viewModel.uiState.collectAsState()
+        val isRefreshing by viewModel.isRefreshing.collectAsState()
 
         TaskDetailScreen(
             state = uiState,
             onEvent = { event ->
                 when (event) {
+                    TaskDetailEvent.OnRefresh -> viewModel.onRefresh()
                     TaskDetailEvent.OnDeleteConfirmClick -> viewModel.deleteConfirm()
                     is TaskDetailEvent.OnEditTaskEvent -> {
                         Log.d("DEBUG", "OnEditTaskEvent ${event.id}")
                     }
                     TaskDetailEvent.OnBackEvent -> navController.popBackStack()
                 }
-            }
+            },
+            isRefreshing = isRefreshing,
         )
     }
 }
