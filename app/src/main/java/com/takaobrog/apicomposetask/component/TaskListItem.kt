@@ -18,6 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.component.component.DefaultText
+import com.takaobrog.component.component.ProgressPercentItem
+import com.takaobrog.component.component.TargetDateText
 
 @Composable
 fun TaskListItem(

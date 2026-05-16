@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
 import com.takaobrog.component.component.DefaultText
+import com.takaobrog.component.component.ProgressPercentItem
+import com.takaobrog.component.component.TargetDateText
 import com.takaobrog.component.component.button.DoubleButton
 import com.takaobrog.component.component.scrollable.ScrollableColumn
 

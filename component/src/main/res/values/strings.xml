@@ -3,4 +3,6 @@
     <string name="dialog_cansel">キャンセル</string>
     <string name="fab_icon_description">タスク追加</string>
     <string name="back_button_description">戻る</string>
+    <string name="target_date_text_label">期限</string>
+    <string name="target_date_text_empty">未定</string>
 </resources>
