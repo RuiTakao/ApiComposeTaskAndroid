@@ -24,7 +24,7 @@ import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEvent
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.component.DefaultText
 import com.takaobrog.component.component.FAButton
-import com.takaobrog.component.component.ScrollableBox
+import com.takaobrog.component.component.scrollable.ScrollableBox
 import com.takaobrog.component.model.ErrorState
 import com.takaobrog.component.screen.ErrorScreen
 import com.takaobrog.component.screen.LoadingScreen

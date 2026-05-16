@@ -19,6 +19,9 @@ class TaskDetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TaskDetailUiState>(TaskDetailUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
     init {
         viewModelScope.launch {
             repository.getTask(id = 1)
@@ -42,6 +45,23 @@ class TaskDetailViewModel @Inject constructor(
                     }
                 )
             }
+        }
+    }
+
+    fun onRefresh() {
+        _isRefreshing.value = true
+
+        // TODO: リトライで正規実装
+        viewModelScope.launch {
+            repository.getTask(id = 1)
+                .catch {
+                    _isRefreshing.value = false
+                    Log.e("DEBUG", "error $it")
+                }
+                .collect { item ->
+                    _isRefreshing.value = false
+                    _uiState.value = TaskDetailUiState.Success(item = item)
+                }
         }
     }
 }
