@@ -2,18 +2,15 @@ package com.takaobrog.apicomposetask.screen.task_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEffect
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.model.ConverterState
-import com.takaobrog.component.model.ReloadState
+import com.takaobrog.component.model.DialogState
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,11 +22,8 @@ class TaskListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _reloadState = MutableStateFlow<ReloadState>(ReloadState.Idle)
-    val reloadState = _reloadState.asStateFlow()
-
-    private val _effect = MutableSharedFlow<TaskListEffect>()
-    val effect = _effect.asSharedFlow()
+    private val _dialogState = MutableStateFlow<DialogState>(DialogState.Idle)
+    val dialogState = _dialogState.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -38,7 +32,7 @@ class TaskListViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getTaskList()
                 .catch { e ->
-                    _uiState.value = TaskListUiState.Error(error = converterState.errorState(e = e))
+                    _dialogState.value = DialogState.Error(error = converterState.errorState(e = e))
                 }.collect { list ->
                     _uiState.value = TaskListUiState.Success(list = list)
                 }
@@ -48,28 +42,20 @@ class TaskListViewModel @Inject constructor(
     fun onRefresh() {
         _isRefreshing.value = true
         viewModelScope.launch {
-            _effect.emit(TaskListEffect.Reload)
+            repository.getTaskList()
+                .catch { e ->
+                    _dialogState.value = DialogState.Error(error = converterState.errorState(e = e))
+                }
+                .onCompletion {
+                    _isRefreshing.value = false
+                }
+                .collect { list ->
+                    _uiState.value = TaskListUiState.Success(list = list)
+                }
         }
     }
 
-    fun onRetry() {
-        viewModelScope.launch {
-            delay(500)
-            _effect.emit(TaskListEffect.Reload)
-        }
-    }
-
-    suspend fun reload() {
-        if (reloadState.value is ReloadState.Reloading) return
-        _reloadState.value = ReloadState.Reloading
-        repository.getTaskList()
-            .catch { e ->
-                _isRefreshing.value = false
-                _reloadState.value = ReloadState.Error(error = converterState.errorState(e = e))
-            }.collect { list ->
-                _isRefreshing.value = false
-                _reloadState.value = ReloadState.Idle
-                _uiState.value = TaskListUiState.Success(list = list)
-            }
+    fun onDismiss() {
+        _dialogState.value = DialogState.Idle
     }
 }

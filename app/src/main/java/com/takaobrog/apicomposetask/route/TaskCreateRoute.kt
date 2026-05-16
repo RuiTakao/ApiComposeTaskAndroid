@@ -13,8 +13,8 @@ import com.takaobrog.apicomposetask.screen.task_create.TaskCreateViewModel
 import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateEffect
 import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateEvent
 import com.takaobrog.component.R
+import com.takaobrog.component.component.dialog.ErrorDialog
 import com.takaobrog.component.model.SendingState
-import com.takaobrog.component.screen.ErrorDialogScreen
 import com.takaobrog.component.screen.LoadingScreen
 
 fun NavGraphBuilder.taskCreateRoute(navController: NavHostController) {
@@ -57,7 +57,7 @@ fun NavGraphBuilder.taskCreateRoute(navController: NavHostController) {
                 alpha = 0.6f,
             )
 
-            is SendingState.Error -> ErrorDialogScreen(
+            is SendingState.Error -> ErrorDialog(
                 state = (sendingState as SendingState.Error).error,
                 onDismiss = { viewModel.dismiss() }
             )

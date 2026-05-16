@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.takaobrog.component.R
+import com.takaobrog.component.component.dialog.ErrorDialog
 import com.takaobrog.component.model.ErrorState
 import com.takaobrog.component.model.ReloadState
 
@@ -22,7 +23,7 @@ fun ReloadingScreen(
             alpha = 0.6f,
         )
 
-        is ReloadState.Error -> ErrorDialogScreen(
+        is ReloadState.Error -> ErrorDialog(
             state = state.error,
             onDismiss = { onDismissError() }
         )

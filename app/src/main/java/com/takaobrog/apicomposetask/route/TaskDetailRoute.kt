@@ -10,11 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.takaobrog.apicomposetask.component.TaskDetailDialogScreen
 import com.takaobrog.apicomposetask.screen.task_detail.TaskDetailScreen
 import com.takaobrog.apicomposetask.screen.task_detail.TaskDetailViewModel
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEffect
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEvent
+import com.takaobrog.component.screen.DialogScreen
 
 fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
     composable(
@@ -40,20 +40,21 @@ fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
                 when (event) {
                     TaskDetailEvent.OnRefresh -> viewModel.onRefresh()
                     is TaskDetailEvent.OnDismiss -> navController.popBackStack()
-                    TaskDetailEvent.OnDeleteConfirmClick -> viewModel.deleteConfirm()
+                    is TaskDetailEvent.OnDeleteConfirmClick -> viewModel.deleteConfirm(title = event.title)
                     is TaskDetailEvent.OnEditTaskEvent -> {
                         Log.d("DEBUG", "OnEditTaskEvent ${event.id}")
                     }
+
                     TaskDetailEvent.OnBackEvent -> navController.popBackStack()
                 }
             },
             isRefreshing = isRefreshing,
         )
 
-        TaskDetailDialogScreen(
+        DialogScreen(
             state = dialogState,
             onDismiss = { viewModel.onDismiss() },
-            onDelete = { viewModel.onDelete() },
+            onConfirm = { viewModel.onDelete() },
         )
     }
 }

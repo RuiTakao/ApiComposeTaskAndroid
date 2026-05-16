@@ -3,10 +3,10 @@ package com.takaobrog.apicomposetask.screen.task_detail
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailDialogState
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEffect
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailUiState
 import com.takaobrog.component.model.ConverterState
+import com.takaobrog.component.model.DialogState
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class TaskDetailViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<TaskDetailEffect>()
     val effect = _effect.asSharedFlow()
 
-    private val _dialogState = MutableStateFlow<TaskDetailDialogState>(TaskDetailDialogState.Idle)
+    private val _dialogState = MutableStateFlow<DialogState>(DialogState.Idle)
     val dialogState = _dialogState.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
@@ -40,7 +41,7 @@ class TaskDetailViewModel @Inject constructor(
                 .catch { e ->
                     Log.e("DEBUG", "error $e")
                     _dialogState.value =
-                        TaskDetailDialogState.Error(error = converterState.errorState(e = e))
+                        DialogState.Error(error = converterState.errorState(e = e))
                 }
                 .collect { item ->
                     _uiState.value = TaskDetailUiState.Success(item = item)
@@ -48,12 +49,12 @@ class TaskDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteConfirm() {
-        _dialogState.value = TaskDetailDialogState.DeleteConfirm(title = "api学習")
+    fun deleteConfirm(title : String) {
+        _dialogState.value = DialogState.Confirm(title = "${title}を削除しますか？")
     }
 
     fun onDelete() {
-        _dialogState.value = TaskDetailDialogState.Idle
+        _dialogState.value = DialogState.Idle
         viewModelScope.launch {
             repository.deleteTask(id = 1)
                 .collect { result ->
@@ -65,7 +66,7 @@ class TaskDetailViewModel @Inject constructor(
                         onFailure = { e ->
                             Log.d("DEBUG", "e $e")
                             _dialogState.value =
-                                TaskDetailDialogState.Error(error = converterState.errorState(e = e))
+                                DialogState.Error(error = converterState.errorState(e = e))
                         }
                     )
                 }
@@ -75,21 +76,31 @@ class TaskDetailViewModel @Inject constructor(
     fun onRefresh() {
         _isRefreshing.value = true
 
-        // TODO: リトライで正規実装
         viewModelScope.launch {
             repository.getTask(id = 1)
-                .catch {
+                .catch { e ->
+                    _dialogState.value =
+                        DialogState.Error(error = converterState.errorState(e = e))
+                    Log.e("DEBUG", "error $e")
+                }
+                .onCompletion {
                     _isRefreshing.value = false
-                    Log.e("DEBUG", "error $it")
                 }
                 .collect { item ->
-                    _isRefreshing.value = false
                     _uiState.value = TaskDetailUiState.Success(item = item)
                 }
         }
     }
 
     fun onDismiss() {
-        _dialogState.value = TaskDetailDialogState.Idle
+        val initialError =
+            uiState.value is TaskDetailUiState.Loading && dialogState.value is DialogState.Error
+
+        if (initialError) {
+            viewModelScope.launch {
+                _effect.emit(TaskDetailEffect.OnBackEvent)
+            }
+        }
+        _dialogState.value = DialogState.Idle
     }
 }

@@ -25,8 +25,6 @@ import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.component.DefaultText
 import com.takaobrog.component.component.FAButton
 import com.takaobrog.component.component.scrollable.ScrollableBox
-import com.takaobrog.component.model.ErrorState
-import com.takaobrog.component.screen.ErrorDialogScreen
 import com.takaobrog.component.screen.LoadingScreen
 import com.takaobrog.core.domain.data.GetTaskListResponse
 
@@ -52,11 +50,6 @@ fun TaskListScreen(
                 is TaskListUiState.Success -> if (state.list.isEmpty()) SuccessEmptyScreen() else SuccessScreen(
                     list = state.list,
                     onEvent = onEvent,
-                )
-
-                is TaskListUiState.Error -> ErrorDialogScreen(
-                    state = state.error,
-                    onDismiss = { onEvent(TaskListEvent.OnDismiss(error = state.error)) }
                 )
             }
         }
@@ -115,19 +108,5 @@ fun TaskListScreen_Preview_Success() {
 @Composable
 fun TaskListScreen_Preview_SuccessEmpty() {
     val state = TaskListUiState.Success(list = listOf())
-    TaskListScreen(state = state, onEvent = {}, isRefreshing = false)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TaskListScreen_Preview_NetworkError() {
-    val state = TaskListUiState.Error(error = ErrorState.NetworkError)
-    TaskListScreen(state = state, onEvent = {}, isRefreshing = false)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TaskListScreen_Preview_SystemError() {
-    val state = TaskListUiState.Error(error = ErrorState.SystemError(message = "404"))
     TaskListScreen(state = state, onEvent = {}, isRefreshing = false)
 }

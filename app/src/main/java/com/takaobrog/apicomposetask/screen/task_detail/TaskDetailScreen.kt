@@ -43,7 +43,7 @@ fun TaskDetailScreen(
                     progressPercent = .3f,
                     targetDate = "2026/5/14",
                     onClickEditButton = { onEvent(TaskDetailEvent.OnEditTaskEvent(id = 1)) },
-                    onClickDeleteButton = { onEvent(TaskDetailEvent.OnDeleteConfirmClick) },
+                    onClickDeleteButton = { onEvent(TaskDetailEvent.OnDeleteConfirmClick(title = state.item.title)) },
                 )
             }
         }
