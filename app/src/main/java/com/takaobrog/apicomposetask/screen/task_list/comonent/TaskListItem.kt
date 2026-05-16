@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.component
+package com.takaobrog.apicomposetask.screen.task_list.comonent
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

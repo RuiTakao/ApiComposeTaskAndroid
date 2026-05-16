@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.component
+package com.takaobrog.apicomposetask.screen.task_detail.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable

@@ -9,7 +9,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.takaobrog.apicomposetask.component.TaskDetailItem
+import com.takaobrog.apicomposetask.screen.task_detail.component.TaskDetailItem
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEvent
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailUiState
 import com.takaobrog.component.component.app_bar.DefaultTopAppBarBack

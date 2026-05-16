@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.takaobrog.apicomposetask.R
-import com.takaobrog.apicomposetask.component.TaskListItem
+import com.takaobrog.apicomposetask.screen.task_list.comonent.TaskListItem
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEvent
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.component.DefaultText
