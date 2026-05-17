@@ -1,6 +1,5 @@
 package com.takaobrog.apicomposetask.route
 
-import android.util.Log
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,9 +40,7 @@ fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
                     TaskDetailEvent.OnRefresh -> viewModel.onRefresh()
                     is TaskDetailEvent.OnDismiss -> navController.popBackStack()
                     is TaskDetailEvent.OnDeleteConfirmClick -> viewModel.deleteConfirm(title = event.title)
-                    is TaskDetailEvent.OnEditTaskEvent -> {
-                        Log.d("DEBUG", "OnEditTaskEvent ${event.id}")
-                    }
+                    is TaskDetailEvent.OnEditTaskEvent -> navController.navigate(route = "${ScreenRoute.TaskEdit.route}/${event.id}")
 
                     TaskDetailEvent.OnBackEvent -> navController.popBackStack()
                 }
