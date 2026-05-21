@@ -39,9 +39,28 @@ class TaskRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun updateTask(
+        id: Int,
+        createTaskRequest: CreateTaskRequest,
+    ): Flow<Result<Unit>> = flow {
+        try {
+            val request = service.updateTask(id = id, createTaskRequest = createTaskRequest)
+
+            if (request.isSuccessful) {
+                emit(Result.success(Unit))
+            } else {
+                Log.d("DEBUG", "code ${request.code()}")
+                emit(Result.failure(Exception("更新失敗")))
+            }
+        } catch (e: Exception) {
+            Log.d("DEBUG", "code $e")
+            emit(Result.failure(exception = e))
+        }
+    }
+
     override fun deleteTask(id: Int): Flow<Result<Unit>> = flow {
         try {
-            val request = service.deleteTask(id=id)
+            val request = service.deleteTask(id = id)
 
             Log.d("DEBUG", "code ${request.code()}")
             if (request.isSuccessful) {
