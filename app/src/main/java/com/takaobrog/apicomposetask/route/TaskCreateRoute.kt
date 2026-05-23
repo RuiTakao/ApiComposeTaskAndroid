@@ -14,14 +14,14 @@ import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateEffect
 import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateEvent
 import com.takaobrog.component.R
 import com.takaobrog.component.component.dialog.ErrorDialog
-import com.takaobrog.component.model.SendingState
+import com.takaobrog.component.model.FrontLayerState
 import com.takaobrog.component.screen.LoadingScreen
 
 fun NavGraphBuilder.taskCreateRoute(navController: NavHostController) {
     composable(route = ScreenRoute.TaskCreate.route) {
         val viewModel: TaskCreateViewModel = hiltViewModel()
         val formState by viewModel.formState.collectAsState()
-        val sendingState by viewModel.sendingState.collectAsState()
+        val frontLayerState by viewModel.frontLayerState.collectAsState()
 
         LaunchedEffect(Unit) {
             viewModel.effect.collect { effect ->
@@ -50,15 +50,17 @@ fun NavGraphBuilder.taskCreateRoute(navController: NavHostController) {
             }
         )
 
-        when (sendingState) {
-            SendingState.Idle -> null
-            SendingState.Sending -> LoadingScreen(
+        when (frontLayerState) {
+            FrontLayerState.Idle -> null
+            FrontLayerState.Loading -> LoadingScreen(
                 color = colorResource(id = R.color.reloading_indicator_color),
                 alpha = 0.6f,
             )
 
-            is SendingState.Error -> ErrorDialog(
-                state = (sendingState as SendingState.Error).error,
+            is FrontLayerState.Confirm -> null
+
+            is FrontLayerState.Error -> ErrorDialog(
+                state = (frontLayerState as FrontLayerState.Error).error,
                 onDismiss = { viewModel.dismiss() }
             )
         }

@@ -13,7 +13,9 @@ import com.takaobrog.apicomposetask.screen.task_detail.TaskDetailScreen
 import com.takaobrog.apicomposetask.screen.task_detail.TaskDetailViewModel
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEffect
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEvent
-import com.takaobrog.component.screen.DialogScreen
+import com.takaobrog.component.component.dialog.ErrorDialog
+import com.takaobrog.component.component.dialog.OkCancelDialog
+import com.takaobrog.component.model.FrontLayerState
 
 fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
     composable(
@@ -22,7 +24,7 @@ fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
     ) {
         val viewModel: TaskDetailViewModel = hiltViewModel()
         val uiState by viewModel.uiState.collectAsState()
-        val dialogState by viewModel.dialogState.collectAsState()
+        val frontLayerState by viewModel.frontLayerState.collectAsState()
         val isRefreshing by viewModel.isRefreshing.collectAsState()
 
         LaunchedEffect(Unit) {
@@ -48,10 +50,19 @@ fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
             isRefreshing = isRefreshing,
         )
 
-        DialogScreen(
-            state = dialogState,
-            onDismiss = { viewModel.onDismiss() },
-            onConfirm = { viewModel.onDelete() },
-        )
+        when (frontLayerState) {
+            FrontLayerState.Idle -> null
+            FrontLayerState.Loading -> null
+            is FrontLayerState.Confirm -> OkCancelDialog(
+                onConfirm = { viewModel.onDelete() },
+                onDismiss = { viewModel.onDismiss() },
+                title = (frontLayerState as FrontLayerState.Confirm).title,
+            )
+
+            is FrontLayerState.Error -> ErrorDialog(
+                state = (frontLayerState as FrontLayerState.Error).error,
+                onDismiss = { viewModel.onDismiss() },
+            )
+        }
     }
 }

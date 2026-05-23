@@ -7,6 +7,7 @@ import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEffect
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailUiState
 import com.takaobrog.component.model.ConverterState
 import com.takaobrog.component.model.DialogState
+import com.takaobrog.component.model.FrontLayerState
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,8 +30,8 @@ class TaskDetailViewModel @Inject constructor(
     private val _effect = MutableSharedFlow<TaskDetailEffect>()
     val effect = _effect.asSharedFlow()
 
-    private val _dialogState = MutableStateFlow<DialogState>(DialogState.Idle)
-    val dialogState = _dialogState.asStateFlow()
+    private val _frontLayerState = MutableStateFlow<FrontLayerState>(FrontLayerState.Idle)
+    val frontLayerState = _frontLayerState.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -40,8 +41,8 @@ class TaskDetailViewModel @Inject constructor(
             repository.getTask(id = 1)
                 .catch { e ->
                     Log.e("DEBUG", "error $e")
-                    _dialogState.value =
-                        DialogState.Error(error = converterState.errorState(e = e))
+                    _frontLayerState.value =
+                        FrontLayerState.Error(error = converterState.errorState(e = e))
                 }
                 .collect { item ->
                     _uiState.value = TaskDetailUiState.Success(item = item)
@@ -50,11 +51,11 @@ class TaskDetailViewModel @Inject constructor(
     }
 
     fun deleteConfirm(title : String) {
-        _dialogState.value = DialogState.Confirm(title = "${title}を削除しますか？")
+        _frontLayerState.value = FrontLayerState.Confirm(title = "${title}を削除しますか？")
     }
 
     fun onDelete() {
-        _dialogState.value = DialogState.Idle
+        _frontLayerState.value = FrontLayerState.Idle
         viewModelScope.launch {
             repository.deleteTask(id = 1)
                 .collect { result ->
@@ -65,8 +66,8 @@ class TaskDetailViewModel @Inject constructor(
                         },
                         onFailure = { e ->
                             Log.d("DEBUG", "e $e")
-                            _dialogState.value =
-                                DialogState.Error(error = converterState.errorState(e = e))
+                            _frontLayerState.value =
+                                FrontLayerState.Error(error = converterState.errorState(e = e))
                         }
                     )
                 }
@@ -79,8 +80,8 @@ class TaskDetailViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getTask(id = 1)
                 .catch { e ->
-                    _dialogState.value =
-                        DialogState.Error(error = converterState.errorState(e = e))
+                    _frontLayerState.value =
+                        FrontLayerState.Error(error = converterState.errorState(e = e))
                     Log.e("DEBUG", "error $e")
                 }
                 .onCompletion {
@@ -94,13 +95,13 @@ class TaskDetailViewModel @Inject constructor(
 
     fun onDismiss() {
         val initialError =
-            uiState.value is TaskDetailUiState.Loading && dialogState.value is DialogState.Error
+            uiState.value is TaskDetailUiState.Loading && frontLayerState.value is FrontLayerState.Error
 
         if (initialError) {
             viewModelScope.launch {
                 _effect.emit(TaskDetailEffect.OnBackEvent)
             }
         }
-        _dialogState.value = DialogState.Idle
+        _frontLayerState.value = FrontLayerState.Idle
     }
 }

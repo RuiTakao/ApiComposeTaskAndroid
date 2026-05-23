@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListUiState
 import com.takaobrog.component.model.ConverterState
 import com.takaobrog.component.model.DialogState
+import com.takaobrog.component.model.FrontLayerState
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +23,8 @@ class TaskListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<TaskListUiState>(TaskListUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _dialogState = MutableStateFlow<DialogState>(DialogState.Idle)
-    val dialogState = _dialogState.asStateFlow()
+    private val _frontLayerState = MutableStateFlow<FrontLayerState>(FrontLayerState.Idle)
+    val frontLayerState = _frontLayerState.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -32,7 +33,7 @@ class TaskListViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getTaskList()
                 .catch { e ->
-                    _dialogState.value = DialogState.Error(error = converterState.errorState(e = e))
+                    _frontLayerState.value = FrontLayerState.Error(error = converterState.errorState(e = e))
                 }.collect { list ->
                     _uiState.value = TaskListUiState.Success(list = list)
                 }
@@ -44,7 +45,7 @@ class TaskListViewModel @Inject constructor(
         viewModelScope.launch {
             repository.getTaskList()
                 .catch { e ->
-                    _dialogState.value = DialogState.Error(error = converterState.errorState(e = e))
+                    _frontLayerState.value = FrontLayerState.Error(error = converterState.errorState(e = e))
                 }
                 .onCompletion {
                     _isRefreshing.value = false
@@ -56,6 +57,6 @@ class TaskListViewModel @Inject constructor(
     }
 
     fun onDismiss() {
-        _dialogState.value = DialogState.Idle
+        _frontLayerState.value = FrontLayerState.Idle
     }
 }

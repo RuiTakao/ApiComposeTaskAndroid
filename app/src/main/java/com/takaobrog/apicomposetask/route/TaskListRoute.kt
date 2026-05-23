@@ -9,14 +9,15 @@ import androidx.navigation.compose.composable
 import com.takaobrog.apicomposetask.screen.task_list.TaskListScreen
 import com.takaobrog.apicomposetask.screen.task_list.TaskListViewModel
 import com.takaobrog.apicomposetask.screen.task_list.model.TaskListEvent
-import com.takaobrog.component.screen.DialogScreen
+import com.takaobrog.component.component.dialog.ErrorDialog
+import com.takaobrog.component.model.FrontLayerState
 
 
 fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
     composable(route = ScreenRoute.TaskList.route) {
         val viewModel: TaskListViewModel = hiltViewModel()
         val state by viewModel.uiState.collectAsState()
-        val dialogState by viewModel.dialogState.collectAsState()
+        val frontLayerState by viewModel.frontLayerState.collectAsState()
         val isRefreshing by viewModel.isRefreshing.collectAsState()
 
         TaskListScreen(
@@ -35,6 +36,15 @@ fun NavGraphBuilder.taskListRoute(navController: NavHostController) {
             isRefreshing = isRefreshing,
         )
 
-        DialogScreen(state = dialogState, onDismiss = { viewModel.onDismiss() })
+        when (frontLayerState) {
+            FrontLayerState.Idle -> null
+            is FrontLayerState.Confirm -> null
+            FrontLayerState.Loading -> null
+
+            is FrontLayerState.Error -> ErrorDialog(
+                state = (frontLayerState as FrontLayerState.Error).error,
+                onDismiss = { viewModel.onDismiss() },
+            )
+        }
     }
 }

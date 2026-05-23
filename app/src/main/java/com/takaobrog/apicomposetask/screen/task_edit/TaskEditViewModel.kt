@@ -2,10 +2,10 @@ package com.takaobrog.apicomposetask.screen.task_edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.takaobrog.apicomposetask.screen.task_edit.model.FrontLayerState
 import com.takaobrog.apicomposetask.screen.task_edit.model.TaskEditEffect
 import com.takaobrog.apicomposetask.screen.task_edit.model.TaskEditFormState
 import com.takaobrog.component.model.ErrorState
+import com.takaobrog.component.model.FrontLayerState
 import com.takaobrog.core.domain.data.CreateTaskRequest
 import com.takaobrog.core.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

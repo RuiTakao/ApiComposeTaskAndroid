@@ -12,11 +12,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.takaobrog.apicomposetask.screen.task_edit.TaskEditScreen
 import com.takaobrog.apicomposetask.screen.task_edit.TaskEditViewModel
-import com.takaobrog.apicomposetask.screen.task_edit.model.FrontLayerState
 import com.takaobrog.apicomposetask.screen.task_edit.model.TaskEditEffect
 import com.takaobrog.apicomposetask.screen.task_edit.model.TaskEditEvent
 import com.takaobrog.component.R
 import com.takaobrog.component.component.dialog.ErrorDialog
+import com.takaobrog.component.model.FrontLayerState
 import com.takaobrog.component.screen.LoadingScreen
 
 fun NavGraphBuilder.taskEditRoute(navController: NavHostController) {
@@ -58,6 +58,8 @@ fun NavGraphBuilder.taskEditRoute(navController: NavHostController) {
                 color = colorResource(id = R.color.reloading_indicator_color),
                 alpha = 0.6f,
             )
+
+            is FrontLayerState.Confirm -> null
 
             is FrontLayerState.Error -> ErrorDialog(
                 (frontLayerState as FrontLayerState.Error).error,
