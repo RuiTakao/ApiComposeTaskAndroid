@@ -5,12 +5,14 @@ import com.takaobrog.core.data.service.TaskApiService
 import com.takaobrog.core.domain.data.CreateTaskRequest
 import com.takaobrog.core.domain.data.GetTaskListResponse
 import com.takaobrog.core.domain.repository.TaskRepository
+import com.takaobrog.core.util.TimeProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(
     private val service: TaskApiService,
+    private val timeProvider: TimeProvider,
 ) : TaskRepository {
 
     override fun getTaskList(): Flow<List<GetTaskListResponse>> = flow {
@@ -23,8 +25,12 @@ class TaskRepositoryImpl @Inject constructor(
         emit(response)
     }
 
-    override fun createTask(createTaskRequest: CreateTaskRequest): Flow<Result<Unit>> = flow {
+    override fun createTask(title: String): Flow<Result<Unit>> = flow {
         try {
+            val createTaskRequest = CreateTaskRequest(
+                title = title,
+                createdAt = timeProvider.now(),
+            )
             val request = service.createTask(createTaskRequest = createTaskRequest)
 
             if (request.isSuccessful) {

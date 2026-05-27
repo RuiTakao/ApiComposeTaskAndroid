@@ -1,5 +1,6 @@
 package com.takaobrog.apicomposetask.screen.task_edit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.takaobrog.apicomposetask.screen.task_edit.model.TaskEditEffect
@@ -20,8 +21,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskEditViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: TaskRepository,
 ) : ViewModel() {
+    val id: Int = savedStateHandle["id"] ?: 0
+
     private val _formState = MutableStateFlow<TaskEditFormState>(TaskEditFormState())
     val formState = _formState.asStateFlow()
 
@@ -33,7 +37,7 @@ class TaskEditViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repository.getTask(id = 1)
+            repository.getTask(id = id)
                 .catch { }
                 .collect { item ->
                     _formState.update { state ->
@@ -71,7 +75,7 @@ class TaskEditViewModel @Inject constructor(
         )
         _frontLayerState.value = FrontLayerState.Loading
         viewModelScope.launch {
-            repository.updateTask(id = 1, createTaskRequest = createTaskRequest)
+            repository.updateTask(id = id, createTaskRequest = createTaskRequest)
                 .collect { result ->
                     result.fold(
                         onSuccess = {

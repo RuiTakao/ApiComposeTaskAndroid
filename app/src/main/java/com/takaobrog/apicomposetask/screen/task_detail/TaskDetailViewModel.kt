@@ -1,6 +1,7 @@
 package com.takaobrog.apicomposetask.screen.task_detail
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEffect
@@ -20,9 +21,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: TaskRepository,
     private val converterState: ConverterState,
 ) : ViewModel() {
+    val id: Int = savedStateHandle["id"] ?: 0
+
     private val _uiState = MutableStateFlow<TaskDetailUiState>(TaskDetailUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
@@ -37,7 +41,7 @@ class TaskDetailViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repository.getTask(id = 1)
+            repository.getTask(id = id)
                 .catch { e ->
                     Log.e("DEBUG", "error $e")
                     _frontLayerState.value =
@@ -56,7 +60,7 @@ class TaskDetailViewModel @Inject constructor(
     fun onDelete() {
         _frontLayerState.value = FrontLayerState.Idle
         viewModelScope.launch {
-            repository.deleteTask(id = 1)
+            repository.deleteTask(id = id)
                 .collect { result ->
                     result.fold(
                         onSuccess = {
@@ -77,7 +81,7 @@ class TaskDetailViewModel @Inject constructor(
         _isRefreshing.value = true
 
         viewModelScope.launch {
-            repository.getTask(id = 1)
+            repository.getTask(id = id)
                 .catch { e ->
                     _frontLayerState.value =
                         FrontLayerState.Error(error = converterState.errorState(e = e))

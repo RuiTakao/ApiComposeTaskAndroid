@@ -56,11 +56,7 @@ class TaskCreateViewModel @Inject constructor(
     fun onSubmit() {
         _frontLayerState.value = FrontLayerState.Loading
         viewModelScope.launch {
-            val response = repository.createTask(
-                createTaskRequest = CreateTaskRequest(
-                    title = _formState.value.title
-                )
-            )
+            val response = repository.createTask(title = _formState.value.title)
             response.collect { result ->
                 result.fold(
                     onSuccess = {
