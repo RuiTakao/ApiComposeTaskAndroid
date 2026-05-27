@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.component
+package com.takaobrog.component.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -10,8 +10,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.takaobrog.apicomposetask.R
-import com.takaobrog.component.component.DefaultText
+import com.takaobrog.component.R
 
 @Composable
 fun ProgressPercentItem(

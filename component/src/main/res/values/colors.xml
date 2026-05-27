@@ -12,4 +12,6 @@
     <color name="reloading_indicator_color">#FFEEEEEE</color>
     <color name="reloading_background_color">#FF000000</color>
     <color name="fab_icon_color">#FFFFFFFF</color>
+    <color name="percent_progress_color">#FF00FF00</color>
+    <color name="percent_progress_track_color">#FF333333</color>
 </resources>

@@ -1,14 +1,13 @@
-package com.takaobrog.component.screen
+package com.takaobrog.component.component.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.takaobrog.component.R
-import com.takaobrog.component.component.OkDialog
 import com.takaobrog.component.model.ErrorState
 
 @Composable
-fun ErrorScreen(state: ErrorState, onDismiss: () -> Unit) {
+internal fun ErrorDialog(state: ErrorState, onDismiss: () -> Unit) {
     when (state) {
         ErrorState.NetworkError -> {
             OkDialog(
@@ -31,11 +30,11 @@ fun ErrorScreen(state: ErrorState, onDismiss: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun NetworkErrorScreen_Preview() {
-    ErrorScreen(state = ErrorState.NetworkError, onDismiss = {})
+    ErrorDialog(state = ErrorState.NetworkError, onDismiss = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun SystemErrorScreen_Preview() {
-    ErrorScreen(state = ErrorState.SystemError(message = "404"), onDismiss = {})
+    ErrorDialog(state = ErrorState.SystemError(message = "404"), onDismiss = {})
 }

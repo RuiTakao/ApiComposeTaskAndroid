@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface TaskApiService {
@@ -21,6 +22,12 @@ interface TaskApiService {
 
     @POST("tasks/create_task")
     suspend fun createTask(
+        @Body createTaskRequest: CreateTaskRequest,
+    ): Response<Unit>
+
+    @PUT("tasks/update_task/{id}")
+    suspend fun updateTask(
+        @Path("id") id: Int,
         @Body createTaskRequest: CreateTaskRequest,
     ): Response<Unit>
 

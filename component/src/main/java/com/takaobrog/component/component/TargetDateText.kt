@@ -1,4 +1,4 @@
-package com.takaobrog.apicomposetask.component
+package com.takaobrog.component.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
@@ -6,8 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.takaobrog.apicomposetask.R
-import com.takaobrog.component.component.DefaultText
+import com.takaobrog.component.R
 
 @Composable
 fun TargetDateText(targetDate: String?, modifier: Modifier = Modifier) {

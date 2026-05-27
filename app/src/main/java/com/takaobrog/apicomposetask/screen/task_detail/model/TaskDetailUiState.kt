@@ -5,5 +5,4 @@ import com.takaobrog.core.domain.data.GetTaskListResponse
 sealed class TaskDetailUiState {
     object Loading : TaskDetailUiState()
     data class Success(val item: GetTaskListResponse) : TaskDetailUiState()
-    data class Error(val message: String) : TaskDetailUiState()
 }
