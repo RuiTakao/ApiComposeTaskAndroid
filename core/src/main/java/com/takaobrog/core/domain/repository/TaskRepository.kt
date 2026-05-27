@@ -10,7 +10,7 @@ interface TaskRepository {
 
     fun getTask(id: Int): Flow<GetTaskListResponse>
 
-    fun createTask(createTaskRequest: CreateTaskRequest): Flow<Result<Unit>>
+    fun createTask(title: String): Flow<Result<Unit>>
 
     fun updateTask(id: Int, createTaskRequest: CreateTaskRequest): Flow<Result<Unit>>
 

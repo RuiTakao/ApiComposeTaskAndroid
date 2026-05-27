@@ -42,7 +42,7 @@ fun TaskDetailScreen(
                     comment = "API　サーバ作成",
                     progressPercent = .3f,
                     targetDate = "2026/5/14",
-                    onClickEditButton = { onEvent(TaskDetailEvent.OnEditTaskEvent(id = 1)) },
+                    onClickEditButton = { onEvent(TaskDetailEvent.OnEditTaskEvent(id = state.item.id)) },
                     onClickDeleteButton = { onEvent(TaskDetailEvent.OnDeleteConfirmClick(title = state.item.title)) },
                 )
             }
