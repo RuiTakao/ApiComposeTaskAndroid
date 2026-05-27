@@ -13,9 +13,7 @@ import com.takaobrog.apicomposetask.screen.task_detail.TaskDetailScreen
 import com.takaobrog.apicomposetask.screen.task_detail.TaskDetailViewModel
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEffect
 import com.takaobrog.apicomposetask.screen.task_detail.model.TaskDetailEvent
-import com.takaobrog.component.component.dialog.ErrorDialog
-import com.takaobrog.component.component.dialog.OkCancelDialog
-import com.takaobrog.component.model.FrontLayerState
+import com.takaobrog.component.screen.FrontLayerScreen
 
 fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
     composable(
@@ -50,19 +48,11 @@ fun NavGraphBuilder.taskDetailRoute(navController: NavHostController) {
             isRefreshing = isRefreshing,
         )
 
-        when (frontLayerState) {
-            FrontLayerState.Idle -> null
-            FrontLayerState.Loading -> null
-            is FrontLayerState.Confirm -> OkCancelDialog(
-                onConfirm = { viewModel.onDelete() },
-                onDismiss = { viewModel.onDismiss() },
-                title = (frontLayerState as FrontLayerState.Confirm).title,
-            )
-
-            is FrontLayerState.Error -> ErrorDialog(
-                state = (frontLayerState as FrontLayerState.Error).error,
-                onDismiss = { viewModel.onDismiss() },
-            )
-        }
+        FrontLayerScreen(
+            state = frontLayerState,
+            onDismissErrorDialog = viewModel::onDismiss,
+            onConfirm = viewModel::onDelete,
+            onDismissConfirmDialog = viewModel::onDismiss,
+        )
     }
 }

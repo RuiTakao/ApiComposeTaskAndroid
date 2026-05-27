@@ -3,7 +3,6 @@ package com.takaobrog.apicomposetask.route
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.colorResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -12,10 +11,7 @@ import com.takaobrog.apicomposetask.screen.task_create.TaskCreateScreen
 import com.takaobrog.apicomposetask.screen.task_create.TaskCreateViewModel
 import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateEffect
 import com.takaobrog.apicomposetask.screen.task_create.model.TaskCreateEvent
-import com.takaobrog.component.R
-import com.takaobrog.component.component.dialog.ErrorDialog
-import com.takaobrog.component.model.FrontLayerState
-import com.takaobrog.component.screen.LoadingScreen
+import com.takaobrog.component.screen.FrontLayerScreen
 
 fun NavGraphBuilder.taskCreateRoute(navController: NavHostController) {
     composable(route = ScreenRoute.TaskCreate.route) {
@@ -50,19 +46,6 @@ fun NavGraphBuilder.taskCreateRoute(navController: NavHostController) {
             }
         )
 
-        when (frontLayerState) {
-            FrontLayerState.Idle -> null
-            FrontLayerState.Loading -> LoadingScreen(
-                color = colorResource(id = R.color.reloading_indicator_color),
-                alpha = 0.6f,
-            )
-
-            is FrontLayerState.Confirm -> null
-
-            is FrontLayerState.Error -> ErrorDialog(
-                state = (frontLayerState as FrontLayerState.Error).error,
-                onDismiss = { viewModel.dismiss() }
-            )
-        }
+        FrontLayerScreen(state = frontLayerState, onDismissErrorDialog = viewModel::dismiss)
     }
 }

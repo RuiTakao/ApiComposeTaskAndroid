@@ -7,7 +7,7 @@ import com.takaobrog.component.R
 import com.takaobrog.component.model.ErrorState
 
 @Composable
-fun ErrorDialog(state: ErrorState, onDismiss: () -> Unit) {
+internal fun ErrorDialog(state: ErrorState, onDismiss: () -> Unit) {
     when (state) {
         ErrorState.NetworkError -> {
             OkDialog(

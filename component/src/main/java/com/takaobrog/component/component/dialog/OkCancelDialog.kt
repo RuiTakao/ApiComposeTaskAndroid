@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.takaobrog.component.R
 
 @Composable
-fun OkCancelDialog(
+internal fun OkCancelDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     title: String,
